@@ -1,4 +1,4 @@
-#+Title: Dockerfiles for generating python packages to use with Glue
+#+Title: Package python libs for AWS Glue jobs.
 
 
 * Overview
@@ -8,7 +8,7 @@ Including additional python libraries for AWS Glue jobs requires them to be pack
 - =Dockerfile-egg= :: Packages libraries into a =.egg= file for use with AWS Glue Python shell jobs.
 
 
-* How to use.
+* How to use
 
 Run the following commands.
 
