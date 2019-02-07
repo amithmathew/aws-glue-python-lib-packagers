@@ -1,0 +1,27 @@
+#+Title: Dockerfiles for generating python packages to use with Glue
+
+
+* Overview
+Including additional python libraries for AWS Glue jobs requires them to be packaged in a certain way and uploaded to S3. Use the dockerfiles in this repository to isolate the installation and packaging of these libraries. These files use the =pg8000= library as an example, but can be modified to use any *pure*[fn:1] python library.
+
+- =Dockerfile= :: Packages libraries into a =.zip= file so that they can be used with AWS Glue PySpark jobs.
+- =Dockerfile-egg= :: Packages libraries into a =.egg= file for use with AWS Glue Python shell jobs.
+
+
+* How to use.
+
+Run the following commands.
+
+#+BEGIN_SRC bash
+# Build the docker image.
+docker build -t build_pg8000
+
+# Generate the zip file needed.
+docker run --rm --name build_pg8000 -v $PWD/zips:/zips build_pg8000
+
+# Copy the file to S3.
+aws s3 cp ./zips/pg8000.zip s3://my-glue-libs/
+#+END_SRC
+
+
+[fn:1] AWS Glue only supports pure python libraries. So for example, =pg8000= works, but =psycopg2= does not.

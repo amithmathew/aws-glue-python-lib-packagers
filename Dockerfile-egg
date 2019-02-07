@@ -1,0 +1,23 @@
+FROM python:2.7
+
+VOLUME /eggs
+
+RUN apt-get update
+
+#Install the Library
+RUN mkdir /egg_root
+
+RUN pip install pg8000==1.12.4 -t /egg_root
+WORKDIR /egg_root
+
+RUN printf 'from setuptools import setup\nsetup(name="pg8000",version="1.12.4",packages=['"'"'pg8000'"'"'])\n' > setup.py
+
+RUN python setup.py bdist_egg
+
+CMD cp /egg_root/dist/* /eggs
+
+# Run the following commands to use this.
+# docker build -t build_pg8000_egg -f Dockerfile-egg .
+# docker run --rm --name build_pg8000_egg -v $PWD/eggs:/eggs build_pg8000_egg
+# Copy this zip file to S3.
+# aws s3 cp ./eggs/* s3://my-glue-libs/
